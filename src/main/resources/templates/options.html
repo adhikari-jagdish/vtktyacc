@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Task Options</title>
@@ -21,7 +21,7 @@
         <div class="col-md-12" align="center">
             <div id="postResultMsg" style="margin-top:20px"></div>
 
-            <form class="form-inline" method="get" action="/home/redirect">
+            <form class="form-inline" method="get" th:action="@{/home/predirect}">
 
             <button type="submit" class="btn btn-success btn-lg">New Invoice</button>
             </form>
