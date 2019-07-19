@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/calculatetotal.js"></script>
 
 </head>
 <body>
@@ -70,18 +71,22 @@
                 <hr width="100%">
 
                 <div class="form-group row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputCheckIn">Check In</label>
                         <input type="date" class="form-control" id="inputCheckIn" name="mealplan"
                                placeholder="Check In">
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
                         <input type="date" class="form-control" id="inputCheckOut" placeholder="Check Out">
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNoofNights">No of Nights</label>
                         <input type="text" class="form-control" id="inputNoofNights" placeholder="No of Nights">
+                    </div>
+                    <div class="col-sm-3">
+                        <label for="inputNoofPax">No of Pax</label>
+                        <input type="text" class="form-control" id="inputNoofPax" placeholder="No of Pax" oninput="calculateTotal()">
                     </div>
                 </div>
 
@@ -133,10 +138,10 @@
                 <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="inputRate">Rate (PP)</label>
-                        <input type="text" class="form-control" id="inputRate" name="Rate" placeholder="Rate">
+                        <input type="text" class="form-control" id="inputRate" name="Rate" placeholder="Rate" oninput="ccalculateTotal()">
                     </div>
                     <div class="col-sm-4">
-                        <label for="inputSubTotal">Amount</label>
+                        <label for="inputAmount">Amount</label>
                         <input type="text" class="form-control" id="inputAmount" name="Amount"
                                placeholder="Amount" disabled>
                     </div>
@@ -147,16 +152,19 @@
 
                 </div>
 
-                <div class="col-sm-4">
-                    <label for="inputSubTotal">Sub Total</label>
-                    <input type="text" class="form-control" id="inputSubTotal" name="SubTotal"
-                           placeholder="Sub Total" disabled>
-                </div>
+
 
                 <div class="form-group row">
+
+                    <div class="col-sm-4">
+                        <label for="inputSubTotal">Sub Total</label>
+                        <input type="text" class="form-control" id="inputSubTotal" name="SubTotal"
+                               placeholder="Sub Total" disabled>
+                    </div>
+
                     <div class="col-sm-4">
                         <label for="inputRate">Nepal Remit Charges</label>
-                        <input type="text" class="form-control" id="inputRNepalRemitCharges" name="NepalRemitCharges"
+                        <input type="text" class="form-control" id="inputNepalRemitCharges" name="NepalRemitCharges"
                                placeholder="Nepal Remit Charges" disabled>
                     </div>
                     <div class="col-sm-4">
