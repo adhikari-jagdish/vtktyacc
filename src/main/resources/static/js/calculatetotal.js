@@ -1,14 +1,14 @@
 $(document).ready(function() {
     //this calculates values automatically
-    calculation();
-    $("#inputNoofPax, #inputRate").on("keydown keyup", function() {
+    $("#inputNoofAdult, #inputRateAdult").on("keydown keyup", function() {
         calculation();
+
     });
 });
 
 function calculation() {
-            var noofPax = document.getElementById('inputNoofPax').value;
-            var rateperPax = document.getElementById('inputRate').value;
+            var noofPax = document.getElementById('inputNoofAdult').value;
+            var rateperPax = document.getElementById('inputRateAdult').value;
             var amount = document.getElementById('inputAmount').value;
             var gst = document.getElementById('inputGst').value;
             var subtotal = document.getElementById('inputSubTotal').value;

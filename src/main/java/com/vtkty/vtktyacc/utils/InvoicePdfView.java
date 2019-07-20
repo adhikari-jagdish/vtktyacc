@@ -55,16 +55,16 @@ public class InvoicePdfView extends AbstractView {
                 new UnitValue(UnitValue.PERCENT, 50)})
                 .setWidthPercent(100);
 
-        table.addCell(getPartyAddress(invoice.getName(), invoice.getEmail()));
+        table.addCell(getPartyAddress(invoice.getName(), invoice.getAddress()));
         return table;
     }
 
     //Get the Partyname From/To
-    private Cell getPartyAddress(String name, String email) {
+    private Cell getPartyAddress(String name, String address) {
         Paragraph p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .add(new Text(name)).add(NEWLINE)
-                .add(new Text(email));
+                .add(new Text(address));
 
         Cell cell = new Cell()
                 .setBorder(Border.NO_BORDER)

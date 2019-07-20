@@ -6,10 +6,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/calculatetotal.js"></script>
+
 
 </head>
 <body>
@@ -73,21 +70,29 @@
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label for="inputCheckIn">Check In</label>
-                        <input type="date" class="form-control" id="inputCheckIn" name="mealplan"
+                        <input class="form-control" id="inputCheckIn" name="checkin"
                                placeholder="Check In">
                     </div>
                     <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
-                        <input type="date" class="form-control" id="inputCheckOut" placeholder="Check Out">
+                        <input class="form-control" id="inputCheckOut", name="checkout" placeholder="Check Out" >
                     </div>
                     <div class="col-sm-3">
-                        <label for="inputNoofNights">No of Nights</label>
-                        <input type="text" class="form-control" id="inputNoofNights" placeholder="No of Nights">
+                        <label for="inputNoofDays">No of Days</label>
+                        <input type="number" class="form-control" id="inputNoofDays" placeholder="No of Days" disabled>
                     </div>
                     <div class="col-sm-3">
-                        <label for="inputNoofPax">No of Pax</label>
-                        <input type="text" class="form-control" id="inputNoofPax" placeholder="No of Pax" oninput="calculateTotal()">
+                        <label for="selectmealplan">Meal Plan</label>
+                        <div>
+                            <select class="form-control" name="mealplan" id="selectmealplan">
+                                <option>BB</option>
+                                <option>MAPI</option>
+                                <option>APAI</option>
+                                <option>CPAI</option>
+                            </select>
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="form-group row">
@@ -96,15 +101,37 @@
                         <input type="text" class="form-control" id="inputNationality" name="mealplan"
                                placeholder="Nationality">
                     </div>
+
                     <div class="col-sm-4">
-                        <label for="inputMealPlan">Meal Plan</label>
-                        <input type="text" class="form-control" id="inputMealPlan" name="mealplan"
-                               placeholder="Meal Plan">
+                        <label for="inputNoofAdult">No of Adult</label>
+                        <input type="number" class="form-control" id="inputNoofAdult" placeholder="No of Adult" oninput="calculatetotal()">
                     </div>
+
                     <div class="col-sm-4">
-                        <label for="inputNoofNights">No of Rooms</label>
-                        <input type="text" class="form-control" id="inputNoofRooms" placeholder="No of Rooms">
+                        <label for="inputNoofChild">No of Child</label>
+                        <input type="number" class="form-control" id="inputNoofChild" placeholder="No of Child" oninput="calculatetotal()">
                     </div>
+
+
+                </div>
+
+
+                <div class="form-group row">
+                    <div class="col-sm-4">
+                        <label for="inputNoofRoomsDBL">No of Rooms (DBL)</label>
+                        <input type="number" class="form-control" id="inputNoofRoomsDBL" placeholder="No of Rooms (DBL)">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="inputNoofRoomsTRP">No of Rooms (TRP)</label>
+                        <input type="number" class="form-control" id="inputNoofRoomsTRP" placeholder="No of Rooms (TRP)">
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="inputNoofRoomsQUAD">No of Rooms (QUAD)</label>
+                        <input type="number" class="form-control" id="inputNoofRoomsQUAD" placeholder="No of Rooms (QUAD)">
+                    </div>
+
                 </div>
 
                 <h5 style="margin-top:40px;text-align: left">Billing Details:</h5>
@@ -136,16 +163,20 @@
                 <hr width="100%">
 
                 <div class="form-group row">
-                    <div class="col-sm-4">
-                        <label for="inputRate">Rate (PP)</label>
-                        <input type="text" class="form-control" id="inputRate" name="Rate" placeholder="Rate" oninput="ccalculateTotal()">
+                    <div class="col-sm-3">
+                        <label for="inputRateAdult">Rate (Per Adult)</label>
+                        <input type="text" class="form-control" id="inputRateAdult" name="RateAdult" placeholder="Rate per Adult" oninput="calculatetotal()">
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
+                        <label for="inputRateChild">Rate (Per Child)</label>
+                        <input type="text" class="form-control" id="inputRateChild" name="RateChild" placeholder="Rate per Child" oninput="calculatetotal()">
+                    </div>
+                    <div class="col-sm-3">
                         <label for="inputAmount">Amount</label>
                         <input type="text" class="form-control" id="inputAmount" name="Amount"
                                placeholder="Amount" disabled>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputGst">GST (5%)</label>
                         <input type="text" class="form-control" id="inputGst" placeholder="GST" disabled>
                     </div>
@@ -163,7 +194,7 @@
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="inputRate">Nepal Remit Charges</label>
+                        <label for="inputNepalRemitCharges">Nepal Remit Charges</label>
                         <input type="text" class="form-control" id="inputNepalRemitCharges" name="NepalRemitCharges"
                                placeholder="Nepal Remit Charges" disabled>
                     </div>
@@ -182,5 +213,15 @@
         </div>
     </div>
 </div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="Stylesheet" type="text/css" />
+<script type="text/javascript" src="/js/calculatetotal.js"></script>
+<script type="text/javascript" src="/js/calculatedays.js"></script>
 </body>
 </html>

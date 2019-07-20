@@ -39,14 +39,14 @@ public class InvoiceController {
     //PDF
     @GetMapping("/pdfinvoice")
     public String pdfinvoice(Model model) {
-        model.addAttribute("invoice", report);
-        return "invoiceView";
+        //model.addAttribute("invoice", report);
+        return "";
     }
     @RequestMapping(value = "/pdfredirect")
-    public String pdfredirect(@RequestParam String name, @RequestParam String email) {
+    public String pdfredirect(@RequestParam String name, @RequestParam String destination) {
         report = new Invoice();
         report.setName(name);
-        report.setEmail(email);
+        report.setAddress(destination);
         invoiceRepository.save(report);
 
         return "redirect:pdfinvoice";
