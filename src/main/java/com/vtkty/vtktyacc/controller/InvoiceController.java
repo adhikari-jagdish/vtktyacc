@@ -47,7 +47,7 @@ public class InvoiceController {
     //PDF
     @GetMapping("/pdfinvoice")
     public String pdfinvoice(Model model) {
-        //model.addAttribute("invoice", report);
+        model.addAttribute("invoice", report);
         model.addAttribute("address", addressDalImp.getByAgencyCode("KTY"));
         return "invoiceView";
     }
