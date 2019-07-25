@@ -24,23 +24,31 @@
                 <div class="form-group row">
                     <div class="col-sm-6">
                         <label for="inputagencyname">Agency Name</label>
-                        <input type="text" class="form-control" id="inputagencyname" name="name"
+                        <input type="text" class="form-control" id="inputagencyname" name="agencyName"
                                placeholder="Agency Name">
                     </div>
                     <div class="col-sm-6">
                         <label for="inputGSTNumber">GST Number</label>
-                        <input type="text" class="form-control" id="inputGSTNumber" placeholder="GST Number">
+                        <input type="text" class="form-control" id="inputGSTNumber" placeholder="GST Number" ,
+                               name="gstNumber">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="inputPassengerName">Passenger Name</label>
-                        <input type="text" class="form-control" id="inputPassengerName" placeholder="Passenger Name">
+                        <input type="text" class="form-control" id="inputPassengerName" placeholder="Passenger Name"
+                               name="passengerName" required>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="inputContactPerson">Contact Person</label>
-                        <input type="text" class="form-control" id="inputContactPerson" placeholder="Contact Person">
+                        <input type="text" class="form-control" id="inputContactPerson" name="contactPerson"
+                               placeholder="Contact Person">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="inputContactNumber">Contact Number</label>
+                        <input type="number" class="form-control" id="inputContactNumber" name="contactNumber"
+                               placeholder="Contact Number">
                     </div>
                 </div>
 
@@ -48,7 +56,7 @@
                     <div class="col-sm-6">
                         <label for="inputCountryofPassport">Country of Passport</label>
                         <input type="text" class="form-control" id="inputCountryofPassport"
-                               placeholder="Country of Passport">
+                               placeholder="Country of Passport" name="countryOfPassport" required>
                     </div>
                     <div class="col-sm-6">
                         <label for="selectDestination">Destination</label>
@@ -70,21 +78,23 @@
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label for="inputCheckIn">Check In</label>
-                        <input class="form-control" id="inputCheckIn" name="checkin"
-                               placeholder="Check In">
+                        <input class="form-control" id="inputCheckIn" name="checkInDate"
+                               placeholder="Check In" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
-                        <input class="form-control" id="inputCheckOut", name="checkout" placeholder="Check Out" >
+                        <input class="form-control" id="inputCheckOut" , name="checkOutDate" placeholder="Check Out"
+                               required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputNoofDays">No of Days</label>
-                        <input type="number" class="form-control" id="inputNoofDays" placeholder="No of Days" disabled>
+                        <input type="number" class="form-control" id="inputNoofDays" placeholder="No of Days"
+                               name="noOfDays">
                     </div>
                     <div class="col-sm-3">
                         <label for="selectmealplan">Meal Plan</label>
                         <div>
-                            <select class="form-control" name="mealplan" id="selectmealplan">
+                            <select class="form-control" name="mealPlan" id="selectmealplan">
                                 <option>BB</option>
                                 <option>MAPI</option>
                                 <option>APAI</option>
@@ -96,20 +106,28 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNationality">Nationality</label>
-                        <input type="text" class="form-control" id="inputNationality" name="mealplan"
-                               placeholder="Nationality">
+                        <input type="text" class="form-control" id="inputNationality" name="nationality"
+                               placeholder="Nationality" required>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNoofAdult">No of Adult</label>
-                        <input type="number" class="form-control" id="inputNoofAdult" placeholder="No of Adult" oninput="calculatetotal()">
+                        <input type="number" class="form-control" id="inputNoofAdult" name="noOfAdult"
+                               placeholder="No of Adult" oninput="calculatetotal()" required>
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNoofChild">No of Child</label>
-                        <input type="number" class="form-control" id="inputNoofChild" placeholder="No of Child" oninput="calculatetotal()">
+                        <input type="number" class="form-control" id="inputNoofChild" name="noOfChild"
+                               placeholder="No of Child" oninput="calculatetotal()">
+                    </div>
+
+                    <div class="col-sm-3">
+                        <label for="inputNoofInfant">No of Infant</label>
+                        <input type="number" class="form-control" id="inputNoofInfant" name="noOfInfant"
+                               placeholder="No of Infant" oninput="calculatetotal()">
                     </div>
 
 
@@ -117,19 +135,27 @@
 
 
                 <div class="form-group row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
+                        <label for="inputNoofRoomsSNG">No of Rooms (SNG)</label>
+                        <input type="number" class="form-control" id="inputNoofRoomsSNG" name="noOfRoomsSng"
+                               placeholder="No of Rooms (SNG)">
+                    </div>
+                    <div class="col-sm-3">
                         <label for="inputNoofRoomsDBL">No of Rooms (DBL)</label>
-                        <input type="number" class="form-control" id="inputNoofRoomsDBL" placeholder="No of Rooms (DBL)">
+                        <input type="number" class="form-control" id="inputNoofRoomsDBL" name="noOfRoomsDbl"
+                               placeholder="No of Rooms (DBL)">
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNoofRoomsTRP">No of Rooms (TRP)</label>
-                        <input type="number" class="form-control" id="inputNoofRoomsTRP" placeholder="No of Rooms (TRP)">
+                        <input type="number" class="form-control" id="inputNoofRoomsTRP" name="noOfRoomsTrp"
+                               placeholder="No of Rooms (TRP)">
                     </div>
 
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <label for="inputNoofRoomsQUAD">No of Rooms (QUAD)</label>
-                        <input type="number" class="form-control" id="inputNoofRoomsQUAD" placeholder="No of Rooms (QUAD)">
+                        <input type="number" class="form-control" id="inputNoofRoomsQUAD" name="noofRoomsQuad"
+                               placeholder="No of Rooms (QUAD)">
                     </div>
 
                 </div>
@@ -138,22 +164,36 @@
                 <hr width="100%">
 
                 <div class="form-group row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="selectBillingCountry">Billing Country</label>
                         <div>
-                            <select class="form-control" name="billingcountry" id="selectBillingCountry">
+                            <select class="form-control" name="billingCountry" id="selectBillingCountry">
                                 <option>India</option>
                                 <option>Nepal</option>
                             </select>
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                         <label for="selectBillingCurrency">Billing Currency</label>
                         <div>
-                            <select class="form-control" name="billingCurrency" id="selectBillingCurrency">
-                                <option>INR</option>
+                            <select class="form-control" name="billingCurrency" id="selectBillingCurrency">                                <option>INR</option>
                                 <option>US$</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <label for="selectHotelCategory">Hotel Category</label>
+                        <div>
+                            <select class="form-control" name="hotelCategory" id="selectHotelCategory">
+                            <option>5* DLX</option>
+                                <option>4* DLX</option>
+                                <option>3* DLX</option>
+                                <option>3* STD</option>
+                                <option>2* STD</option>
+                                <option>Budget</option>
                             </select>
                         </div>
                     </div>
@@ -165,43 +205,43 @@
                 <div class="form-group row">
                     <div class="col-sm-3">
                         <label for="inputRateAdult">Rate (Per Adult)</label>
-                        <input type="text" class="form-control" id="inputRateAdult" name="RateAdult" placeholder="Rate per Adult" oninput="calculatetotal()">
+                        <input type="number" class="form-control" id="inputRateAdult" name="rateAdult"
+                               placeholder="Rate per Adult" oninput="calculatetotal()">
                     </div>
                     <div class="col-sm-3">
                         <label for="inputRateChild">Rate (Per Child)</label>
-                        <input type="text" class="form-control" id="inputRateChild" name="RateChild" placeholder="Rate per Child" oninput="calculatetotal()">
+                        <input type="number" class="form-control" id="inputRateChild" name="rateChild"
+                               placeholder="Rate per Child" oninput="calculatetotal()">
                     </div>
                     <div class="col-sm-3">
                         <label for="inputAmount">Amount</label>
-                        <input type="text" class="form-control" id="inputAmount" name="Amount"
-                               placeholder="Amount" disabled>
+                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount">
                     </div>
                     <div class="col-sm-3">
                         <label for="inputGst">GST (5%)</label>
-                        <input type="text" class="form-control" id="inputGst" placeholder="GST" disabled>
+                        <input type="number" class="form-control" id="inputGst" placeholder="GST" name="gst">
                     </div>
 
                 </div>
-
 
 
                 <div class="form-group row">
 
                     <div class="col-sm-4">
                         <label for="inputSubTotal">Sub Total</label>
-                        <input type="text" class="form-control" id="inputSubTotal" name="SubTotal"
-                               placeholder="Sub Total" disabled>
+                        <input type="number" class="form-control" id="inputSubTotal" name="subTotal"
+                               placeholder="Sub Total">
                     </div>
 
                     <div class="col-sm-4">
                         <label for="inputNepalRemitCharges">Nepal Remit Charges</label>
-                        <input type="text" class="form-control" id="inputNepalRemitCharges" name="NepalRemitCharges"
-                               placeholder="Nepal Remit Charges" disabled>
+                        <input type="number" class="form-control" id="inputNepalRemitCharges" name="nepalRemitCharges"
+                               placeholder="Nepal Remit Charges">
                     </div>
                     <div class="col-sm-4">
                         <label for="inputGrandTotal">Grand Total</label>
-                        <input type="text" class="form-control" id="inputGrandTotal" name="GrandTotal"
-                               placeholder="Grand Total" disabled>
+                        <input type="number" class="form-control" id="inputGrandTotal" name="grandTotal"
+                               placeholder="Grand Total">
                     </div>
 
                 </div>
@@ -215,12 +255,12 @@
 </div>
 
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="Stylesheet" type="text/css" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="Stylesheet"
+      type="text/css"/>
 <script type="text/javascript" src="/js/calculatetotal.js"></script>
 <script type="text/javascript" src="/js/calculatedays.js"></script>
 </body>

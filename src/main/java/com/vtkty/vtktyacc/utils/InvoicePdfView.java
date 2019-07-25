@@ -8,7 +8,9 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import com.vtkty.vtktyacc.service.model.Address;
 import com.vtkty.vtktyacc.service.model.Invoice;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.AbstractView;
@@ -23,11 +25,15 @@ import static sun.security.pkcs11.wrapper.Constants.NEWLINE;
 @Component("invoiceView")
 public class InvoicePdfView extends AbstractView {
 
+    private Paragraph p;
+    private Cell cell;
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setHeader("Content-Disposition", "attachment; filename=VTInvoice.pdf");
+
         Invoice invoice = (Invoice) model.get("invoice");
+        Address address = (Address) model.get("address");
+        response.setHeader("Content-Disposition", "attachment; filename=VT.pdf");
 
 
         //IText API
@@ -37,44 +43,50 @@ public class InvoicePdfView extends AbstractView {
         pdfDocument.setFontSize(12);
         //PdfFont bold = PdfFontFactory.createFont(BOLD, true);
 
-
-        //Get from and to paties name and address
-        pdfDocument.add(getAddressTable(invoice));
-
-        pdfDocument.add(ktyLogo());
+        //Top Cells with Logo and our Address
+        pdfDocument.add(getAddressTable(address));
+        pdfDocument.setBottomMargin(10);
 
 
-        pdfDocument.close();
+
+
+        pdfDocument.close(); //close document
     }
 
-
-    private Table getAddressTable(Invoice invoice){
+    private Table getAddressTable(Address address) throws MalformedURLException {
         //From Text
         Table table = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 50),
                 new UnitValue(UnitValue.PERCENT, 50)})
                 .setWidthPercent(100);
 
-        table.addCell(getPartyAddress(invoice.getName(), invoice.getAddress()));
+
+        table.addCell(ktyLogo());
+        table.addCell(getOurAddress(address.getAgencyName(), address.getAddress(), address.getContactNo(), address.getEmail(), address.getUrl()));
+
         return table;
     }
 
-    //Get the Partyname From/To
-    private Cell getPartyAddress(String name, String address) {
-        Paragraph p = new Paragraph()
+    //Get Our Address
+    private Cell getOurAddress(String name, String address, String contactNo, String email, String url) {
+        p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .add(new Text(name)).add(NEWLINE)
-                .add(new Text(address));
+                .add(new Text(address)).add(NEWLINE)
+                .add(new Text("Office: " + contactNo)).add(NEWLINE)
+                .add(new Text("Email: " + email)).add(NEWLINE)
+                .add(new Text("URL: " + url));
 
-        Cell cell = new Cell()
+        cell = new Cell()
                 .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.RIGHT)
                 .add(p);
 
         return cell;
     }
 
-    private Image ktyLogo() throws MalformedURLException {
-
+    //Method for Logo
+    private Cell ktyLogo() throws MalformedURLException {
         // Creating an ImageData object
         String imFile = "http://kailashtirthayatra.org/images/logo.png";
         ImageData data = ImageDataFactory.create(imFile);
@@ -82,6 +94,9 @@ public class InvoicePdfView extends AbstractView {
         // Creating an Image object
         Image image = new Image(data);
 
-        return image;
+        cell = new Cell()
+                .setBorder(Border.NO_BORDER)
+                .add(image);
+        return cell;
     }
 }
