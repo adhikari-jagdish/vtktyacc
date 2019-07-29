@@ -75,6 +75,7 @@ public class InvoiceController {
                               @RequestParam String billingCountry,
                               @RequestParam String billingCurrency,
                               @RequestParam String hotelCategory,
+                              @RequestParam String inclusions,
                               @RequestParam float rateAdult,
                               @RequestParam float rateChild,
                               @RequestParam float amount,
@@ -112,7 +113,8 @@ public class InvoiceController {
         report.setSubTotal(subTotal);
         report.setNepalRemitCharges(nepalRemitCharges);
         report.setGrandTotal(grandTotal);
-        invoiceRepository.save(report);
+        report.setPackageInclusions(inclusions);
+        //invoiceRepository.save(report);
         return "redirect:pdfinvoice";
     }
 

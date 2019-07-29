@@ -36,6 +36,7 @@ public class Invoice {
     private String billingCountry;
     private String billingCurrency;
     private String hotelCategory;
+    private String packageInclusions;
     private float rateAdult;
     private float rateChild;
     private float amount;
@@ -288,6 +289,14 @@ public class Invoice {
 
     public void setGrandTotal(float grandTotal) {
         this.grandTotal = grandTotal;
+    }
+
+    public String getPackageInclusions() {
+        return packageInclusions;
+    }
+
+    public void setPackageInclusions(String packageInclusions) {
+        this.packageInclusions = packageInclusions;
     }
 
     public String getContactNumber() {

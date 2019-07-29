@@ -3,6 +3,7 @@ package com.vtkty.vtktyacc.utils;
 
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
@@ -11,6 +12,8 @@ import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.UnitValue;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.PdfPCell;
 import com.vtkty.vtktyacc.service.model.Address;
 import com.vtkty.vtktyacc.service.model.Invoice;
 import org.springframework.stereotype.Component;
@@ -28,75 +31,76 @@ public class InvoicePdfView extends AbstractView {
 
     private Paragraph p;
     private Cell cell;
+    String one = "1";
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
         Invoice invoice = (Invoice) model.get("invoice");
         Address address = (Address) model.get("address");
-        response.setHeader("Content-Disposition", "attachment; filename=VT.pdf");
+        final String DEST = "attachment; filename=" + invoice.getAgencyName() + ".pdf";
+        response.setHeader("Content-Disposition", DEST);
 
 
         //IText API
         PdfWriter pdfWriter = new PdfWriter(response.getOutputStream());
         PdfDocument pdf = new PdfDocument(pdfWriter);
         Document pdfDocument = new Document(pdf);
-        pdfDocument.setFontSize(12);
+        pdfDocument.setFontSize(11);
 
         //Top Cells with Logo and our Address
-        pdfDocument.add(getAddressTable(address));
-        pdfDocument.setBottomMargin(10);
-
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .setFontSize(20)
-                .setBold()
-                .setTextAlignment(TextAlignment.LEFT)
-                .add(new Text("Invoice"));
-
-        pdfDocument.add(p);
-
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .setTextAlignment(TextAlignment.RIGHT)
-                .add(new Text("Invoice Date:")).add(NEWLINE)
-                .add(new Text("Invoice Number:"));
-
-        pdfDocument.add(p);
-
-
+        pdfDocument.add(getTopTable(invoice));
         pdfDocument.setBottomMargin(10);
 
         //Party Details
         pdfDocument.add(getAgencyDetailsTable(invoice));
 
+        pdfDocument.add(getTourDetailsTable(invoice));
+        pdfDocument.add(getTourDetailsSecTable(invoice));
+
+        pdfDocument.add(getNoofPaxTable(invoice));
+
+        pdfDocument.add(getNoofRoomsTable(invoice));
+
+        pdfDocument.add(getHeaderTable());
+        pdfDocument.add(getBodyTable(invoice));
+
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .setTextAlignment(TextAlignment.LEFT)
+                .add(new Text("Amount in words : ").setBold()).add(new Text("INR. Eighty Three Thousand Four Hundred Eight 72 Paisa Only"));
+        pdfDocument.add(p);
+
+        pdfDocument.add(getBankDetailsTable());
+
+        pdfDocument.add(getEndSignTable());
+
         pdfDocument.close(); //close document
     }
 
     //Our Address Table
-    private Table getAddressTable(Address address) throws MalformedURLException {
+    private Table getTopTable(Invoice invoice) throws MalformedURLException {
         //From Text
         Table table = new Table(new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 50),
                 new UnitValue(UnitValue.PERCENT, 50)})
+                .setMarginBottom(30)
                 .setWidthPercent(100);
 
 
-        table.addCell(ktyLogo());
-        table.addCell(getOurAddress(address.getAgencyName(), address.getAddress(), address.getContactNo(), address.getEmail(), address.getUrl()));
+        table.addCell(ktyLogo("https://i.ibb.co/6r8ygjQ/Screenshot-from-2019-07-28-18-18-09.png"));
+        table.addCell(getInvoiceDetails(invoice));
 
         return table;
     }
 
     //Get Our Address
-    private Cell getOurAddress(String name, String address, String contactNo, String email, String url) {
+    private Cell getInvoiceDetails(Invoice invoice) {
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
-                .add(new Text(name)).add(NEWLINE)
-                .add(new Text(address)).add(NEWLINE)
-                .add(new Text("Office: " + contactNo)).add(NEWLINE)
-                .add(new Text("Email: " + email)).add(NEWLINE)
-                .add(new Text("URL: " + url));
+                .setTextAlignment(TextAlignment.RIGHT)
+                .add(new Text("Invoice").setBold().setFontSize(22)).add(NEWLINE)
+                .add(new Text("Invoice Number: " + invoice.getInvoiceNo())).add(NEWLINE)
+                .add(new Text("Invoice Date: " + invoice.getCheckInDate()));
 
         cell = new Cell()
                 .setBorder(Border.NO_BORDER)
@@ -107,9 +111,8 @@ public class InvoicePdfView extends AbstractView {
     }
 
     //Method for Logo
-    private Cell ktyLogo() throws MalformedURLException {
+    private Cell ktyLogo(String imFile) throws MalformedURLException {
         // Creating an ImageData object
-        String imFile = "http://kailashtirthayatra.org/images/logo.png";
         ImageData data = ImageDataFactory.create(imFile);
 
         // Creating an Image object
@@ -124,16 +127,19 @@ public class InvoicePdfView extends AbstractView {
 
     //Get Party Details
     private Cell getPartyDetailsLeft(String agencyName, String gstNo, String passengerName,
-                                 String contactPerson, String countryOfPassport, String destination) {
+                                     String contactPerson, String countryOfPassport, String destination,
+                                     String contactNumber) {
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .add(new Text("To:")).add(NEWLINE)
-                .add(new Text(agencyName)).add(NEWLINE)
+                .add(new Text(agencyName).setBold()).add(NEWLINE)
                 .add(new Text(gstNo)).add(NEWLINE)
-                .add(new Text("Passenger Name: " +passengerName)).add(NEWLINE)
-                .add(new Text("Contact Person: " +contactPerson)).add(NEWLINE)
-                .add(new Text("Country of Passport: " +countryOfPassport)).add(NEWLINE)
-                .add(new Text("Destination: " +destination));
+                .add(new Text("Passenger Name: ")).add(new Text(passengerName))
+                .add(NEWLINE)
+                .add(new Text("Contact Person: ")).add(new Text(contactPerson))
+                .add(NEWLINE)
+                .add(new Text("Contact No: ")).add(new Text(contactNumber))
+                .setMarginBottom(20);
 
         cell = new Cell()
                 .setBorder(Border.NO_BORDER)
@@ -143,39 +149,307 @@ public class InvoicePdfView extends AbstractView {
         return cell;
     }
 
-    //Get Party Details
-    private Cell getPartyDetailsRight( String contactNumber, String mealPlan, String destination) {
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .add(NEWLINE)
-                .add(NEWLINE)
-                .add(NEWLINE)
-                .add(NEWLINE)
-                .add(new Text("Contact No: " +contactNumber)).add(NEWLINE)
-                .add(new Text("Meal Plan: " +mealPlan)).add(NEWLINE)
-                .add(new Text("Destination: " +destination));
-
-        cell = new Cell()
-                .setBorder(Border.NO_BORDER)
-                .setTextAlignment(TextAlignment.RIGHT)
-                .add(p);
-
-        return cell;
-    }
 
     //Agency Details Table
     private Table getAgencyDetailsTable(Invoice invoice) {
         //From Text
         Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 50)})
+                new UnitValue(UnitValue.PERCENT, 100)})
                 .setWidthPercent(100);
 
         table.addCell(getPartyDetailsLeft(invoice.getAgencyName(), invoice.getGstNumber(),
                 invoice.getPassengerName(), invoice.getContactPerson(), invoice.getCountryOfPassport(),
-                invoice.getDestination()));
+                invoice.getDestination(), "6396667854"));
 
-        table.addCell(getPartyDetailsRight("6396667854", invoice.getMealPlan(), invoice.getDestination()));
+
+        return table;
+    }
+
+    //Destination/Nationality/Flight Table
+    private Table getTourDetailsTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 25),
+                new UnitValue(UnitValue.PERCENT, 25),
+                new UnitValue(UnitValue.PERCENT, 50)})
+                .setMarginBottom(5)
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("Destination : " + invoice.getDestination()));
+        table.addCell(getParticularsDataCell("Nationality : " + invoice.getNationality()));
+        table.addCell(getParticularsDataCell("Flight Details : " + "ATR-72  Indigo"));
+
+        return table;
+
+    }
+
+    //TourDetailsSecTable Checkin/Checkout/MealPlan
+    private Table getTourDetailsSecTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 35),
+                new UnitValue(UnitValue.PERCENT, 35),
+                new UnitValue(UnitValue.PERCENT, 30)})
+                .setMarginBottom(5)
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("Check In Date : " + invoice.getCheckInDate()));
+        table.addCell(getParticularsDataCell("Check Out Date : " + invoice.getCheckOutDate()));
+        table.addCell(getParticularsDataCell("Meals Plan : " + invoice.getMealPlan()));
+
+        return table;
+
+    }
+
+    //No of Adult/Child/Infant
+    private Table getNoofPaxTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20)
+        })
+                .setMarginBottom(5)
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("No of Adult : " + invoice.getNoOfAdult()));
+        table.addCell(getParticularsDataCell("Child : " + invoice.getNoOfChild()));
+        table.addCell(getParticularsDataCell("Infant : " + invoice.getNoOfInfant()));
+        table.addCell(getParticularsDataCell("Hotel : " + invoice.getHotelCategory()));
+
+        return table;
+
+    }
+
+    //No of Adult/Child/Infant
+    private Table getNoofRoomsTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 30),
+                new UnitValue(UnitValue.PERCENT, 25),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 25)})
+                .setMarginBottom(15)
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("No of Rooms (SNG) : " + invoice.getNoOfRoomsSng()));
+        table.addCell(getParticularsDataCell("Double (DBL) : " + invoice.getNoOfRoomsDbl()));
+        table.addCell(getParticularsDataCell("Triple (TRP) : " + invoice.getNoOfRoomsTrp()));
+        table.addCell(getParticularsDataCell("Quad (QUAD) : " + invoice.getNoofRoomsQuad()));
+        return table;
+    }
+
+    //TourDetailsSecTable Checkin/Checkout/MealPlan
+    private Table getTourDetailsThirdTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 40),
+                new UnitValue(UnitValue.PERCENT, 40),
+                new UnitValue(UnitValue.PERCENT, 20)})
+                .setMarginBottom(5)
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("No of Nights : " + (invoice.getNoOfDays() - 1)));
+        table.addCell(getParticularsDataCell("Hotel : " + invoice.getHotelCategory()));
+
+        return table;
+
+    }
+
+    //Particulars Amount and Rate Table
+    private Table getHeaderTable() {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 10),
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20)})
+                .setWidthPercent(100);
+        table.addCell("SN");
+        table.addCell("Particulars").setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.ORANGE);
+        table.addCell("Rate");
+        table.addCell("Amount");
+
+        return table;
+    }
+
+    //Body Table
+    private Table getBodyTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 10),
+                new UnitValue(UnitValue.PERCENT, 60),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20)})
+                .setWidthPercent(100);
+
+        table.addCell(getSN());
+        table.addCell(getParticularsCell(invoice));
+        table.addCell(getRate(invoice));
+        table.addCell(getAmount(invoice));
+
+        return table;
+
+    }
+
+    private Cell getSN() {
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .add(new Text("1"))
+                .add(NEWLINE).setMarginBottom(2)
+                .add(new Text("2"))
+                .add(NEWLINE).setMarginBottom(2)
+                .add(new Text("3"));
+
+
+        cell = new Cell()
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(p);
+
+        return cell;
+    }
+
+    //Get rate and gst
+    private Cell getRate(Invoice invoice) {
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .add(new Text(String.valueOf(invoice.getRateAdult())))
+                .add(NEWLINE).setMarginBottom(2)
+                .add(new Text(String.valueOf(invoice.getGst())))
+                .add(NEWLINE).setMarginBottom(2)
+                .add(new Text(String.valueOf(invoice.getNepalRemitCharges())))
+                .add(NEWLINE).add(NEWLINE).add(NEWLINE)
+                .add(new Text("Total : ").setBold());
+
+        cell = new Cell()
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(p);
+
+        return cell;
+    }
+
+    //Get rate and gst
+    private Cell getAmount(Invoice invoice) {
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .add(new Text(String.valueOf(invoice.getAmount())))
+                .add(NEWLINE).add(NEWLINE)
+                .add(NEWLINE).add(NEWLINE).add(NEWLINE)
+                .add(new Text(String.valueOf(invoice.getGrandTotal())).setBold());
+
+        cell = new Cell()
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(p);
+
+        return cell;
+    }
+
+    //Get Particulars table cells
+    private Cell getParticularsCell(Invoice invoice) {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 100)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("05/06 Days Nepal Luxury Tour"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("GST 5% "));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("International Bank Txf Charges "));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell(invoice.getPackageInclusions()));
+
+
+        cell = new Cell()
+                .add(table);
+
+        return cell;
+    }
+
+    //Method for Individual cell data for Particulars sections starts
+    private Cell getParticularsDataCell(String data) {
+
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .add(new Text(String.valueOf(data)));
+
+        cell = new Cell()
+                .setBorder(Border.NO_BORDER);
+
+        cell.add(p);
+
+        return cell;
+    }
+
+    //Bank Details Table
+    private Table getBankDetailsTable() {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 60),
+                new UnitValue(UnitValue.PERCENT, 20),
+                new UnitValue(UnitValue.PERCENT, 20)})
+                .setMarginTop(30)
+                .setWidthPercent(100);
+
+        table.addCell(getBankBodyCell());
+        table.addCell(getBlankCell());
+        table.addCell(getBlankCell());
+
+        return table;
+    }
+
+
+    //Get Bank Details Body table cells
+    private Cell getBankBodyCell() {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 50)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell("Name of Bank: "));
+        table.addCell(getParticularsDataCell("Axis Bank Ltd"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Bank Account No: "));
+        table.addCell(getParticularsDataCell("918020111107337"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Account Type: "));
+        table.addCell(getParticularsDataCell("Current Account"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Bank Branch: "));
+        table.addCell(getParticularsDataCell("Old Rajinder Nagar, West Delhi, New Delhi 110060"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("IFSC Code: "));
+        table.addCell(getParticularsDataCell("UTIB0000224"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Beneficiary Name: "));
+        table.addCell(getParticularsDataCell("Kailash Tirtha Yatra"));
+
+        cell = new Cell()
+                .setBorder(Border.NO_BORDER)
+                .add(table);
+
+        return cell;
+    }
+
+    //Get Bank Details Body table cells
+    private Cell getBlankCell() {
+        cell = new Cell()
+                .setBorder(Border.NO_BORDER);
+
+        return cell;
+    }
+
+    //Our Address Table
+    private Table getEndSignTable() throws MalformedURLException {
+        //From Text
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 70),
+                new UnitValue(UnitValue.PERCENT, 30)})
+                .setMarginTop(30)
+                .setWidthPercent(100);
+
+
+        table.addCell(ktyLogo("https://i.ibb.co/ZhtMY5B/Screenshot-from-2019-07-28-17-45-57.png"));
+        table.addCell(ktyLogo("https://i.ibb.co/bvzN1JF/Screenshot-from-2019-07-28-17-45-19.png"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Aruna Adhikari (BDD)"));
+        table.addCell(getParticularsDataCell("Puru Dahal (Accounts)"));
 
         return table;
     }

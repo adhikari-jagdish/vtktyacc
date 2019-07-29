@@ -177,7 +177,8 @@
                     <div class="col-sm-4">
                         <label for="selectBillingCurrency">Billing Currency</label>
                         <div>
-                            <select class="form-control" name="billingCurrency" id="selectBillingCurrency">                                <option>INR</option>
+                            <select class="form-control" name="billingCurrency" id="selectBillingCurrency">
+                                <option>INR</option>
                                 <option>US$</option>
                             </select>
                         </div>
@@ -188,7 +189,7 @@
                         <label for="selectHotelCategory">Hotel Category</label>
                         <div>
                             <select class="form-control" name="hotelCategory" id="selectHotelCategory">
-                            <option>5* DLX</option>
+                                <option>5* DLX</option>
                                 <option>4* DLX</option>
                                 <option>3* DLX</option>
                                 <option>3* STD</option>
@@ -198,6 +199,19 @@
                         </div>
                     </div>
                 </div>
+
+                <h5 style="margin-top:40px;text-align: left">Package Inclusions:</h5>
+                <hr width="100%">
+
+                <div class="form-group row">
+
+                    <div class="col-sm-6">
+
+                        <textarea rows="4" cols="50" id="inclusions" name="inclusions"></textarea>
+
+                    </div>
+                </div>
+
 
                 <h5 style="margin-top:40px;text-align: left">Rate & Amount Details:</h5>
                 <hr width="100%">
@@ -245,6 +259,8 @@
                     </div>
 
                 </div>
+
+
 
                 <button type="submit" class="btn btn-primary px-4 float-center"
                         style="margin-bottom:40px;text-align: center">Save
