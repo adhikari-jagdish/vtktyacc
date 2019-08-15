@@ -64,6 +64,8 @@ public class InvoicePdfView extends AbstractView {
         pdfDocument.add(getHeaderTable());
         pdfDocument.add(getBodyTable(invoice));
 
+        pdfDocument.add(getAmtandDisountTable(invoice));
+
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .setTextAlignment(TextAlignment.LEFT)
@@ -256,14 +258,16 @@ public class InvoicePdfView extends AbstractView {
     private Table getHeaderTable() {
 
         Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 10),
+                new UnitValue(UnitValue.PERCENT, 5),
                 new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 20)})
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15)})
                 .setWidthPercent(100);
         table.addCell("SN");
         table.addCell("Particulars").setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.ORANGE);
-        table.addCell("Rate");
+        table.addCell("Rate Adult");
+        table.addCell("Rate Child");
         table.addCell("Amount");
 
         return table;
@@ -272,69 +276,121 @@ public class InvoicePdfView extends AbstractView {
     //Body Table
     private Table getBodyTable(Invoice invoice) {
         Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 10),
-                new UnitValue(UnitValue.PERCENT, 60),
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 20)})
+                new UnitValue(UnitValue.PERCENT, 5),
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15)})
                 .setWidthPercent(100);
 
         table.addCell(getSN());
         table.addCell(getParticularsCell(invoice));
         table.addCell(getRate(invoice));
         table.addCell(getAmount(invoice));
+        table.addCell("");
 
         return table;
 
     }
 
+    //Amount and Discount Table
+    private Table getAmtandDisountTable(Invoice invoice) {
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 5),
+                new UnitValue(UnitValue.PERCENT, 50),
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 15)})
+                .setWidthPercent(100);
+
+        table.addCell("");
+        table.addCell(getTotalDiscountTexts());
+        table.addCell("");
+        table.addCell(getAmount(invoice));
+        table.addCell("");
+
+        return table;
+
+    }
+
+
     private Cell getSN() {
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .add(new Text("1"))
-                .add(NEWLINE).setMarginBottom(2)
-                .add(new Text("2"))
-                .add(NEWLINE).setMarginBottom(2)
-                .add(new Text("3"));
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 60)})
+                .setWidthPercent(100);
 
+        table.addCell(getParticularsDataCell("1"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("2"));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("3"));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
-                .add(p);
+                .add(table);
+
 
         return cell;
     }
 
-    //Get rate and gst
+    //Get rate
     private Cell getRate(Invoice invoice) {
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .add(new Text(String.valueOf(invoice.getRateAdult())))
-                .add(NEWLINE).setMarginBottom(2)
-                .add(new Text(String.valueOf(invoice.getGst())))
-                .add(NEWLINE).setMarginBottom(2)
-                .add(new Text(String.valueOf(invoice.getNepalRemitCharges())))
-                .add(NEWLINE).add(NEWLINE).add(NEWLINE)
-                .add(new Text("Total : ").setBold());
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 100)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getAmount())));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
+                .setBorder(Border.NO_BORDER)
                 .add(p);
 
         return cell;
     }
 
-    //Get rate and gst
+    //Get amount
+    private Cell getTotalDiscountTexts() {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 100)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell(Constants.Grand_Total));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(Constants.Less_Discounts));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(Constants.Initial_Booking_Amount_Received));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(Constants.Balance_Payment));
+
+        cell = new Cell()
+                .setTextAlignment(TextAlignment.RIGHT)
+                .add(table);
+
+        return cell;
+    }
+
+    //Get amount
     private Cell getAmount(Invoice invoice) {
-        p = new Paragraph()
-                .setMultipliedLeading(1.0f)
-                .add(new Text(String.valueOf(invoice.getAmount())))
-                .add(NEWLINE).add(NEWLINE)
-                .add(NEWLINE).add(NEWLINE).add(NEWLINE)
-                .add(new Text(String.valueOf(invoice.getGrandTotal())).setBold());
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 100)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getAmount())));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
-                .add(p);
+                .add(table);
 
         return cell;
     }
@@ -348,10 +404,11 @@ public class InvoicePdfView extends AbstractView {
 
         table.addCell(getParticularsDataCell("05/06 Days Nepal Luxury Tour"));
         table.startNewRow();
-        table.addCell(getParticularsDataCell("GST 5% "));
+        table.addCell(getParticularsDataCell("GST 5%"));
         table.startNewRow();
-        table.addCell(getParticularsDataCell("International Bank Txf Charges "));
+        table.addCell(getParticularsDataCell(Constants.INTERNATIONAL_BANK_TXF));
         table.startNewRow();
+        table.addCell(getParticularsDataCell(Constants.PACKAGE_INCLUSIONS).setBold());
         table.addCell(getParticularsDataCell(invoice.getPackageInclusions()));
 
 
