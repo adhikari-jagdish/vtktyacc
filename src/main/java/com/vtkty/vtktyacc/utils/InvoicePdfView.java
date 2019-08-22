@@ -286,8 +286,8 @@ public class InvoicePdfView extends AbstractView {
         table.addCell(getSN());
         table.addCell(getParticularsCell(invoice));
         table.addCell(getRate(invoice));
-        table.addCell(getAmount(invoice));
         table.addCell("");
+        table.addCell(getAmount(invoice));
 
         return table;
 
@@ -296,18 +296,12 @@ public class InvoicePdfView extends AbstractView {
     //Amount and Discount Table
     private Table getAmtandDisountTable(Invoice invoice) {
         Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 5),
-                new UnitValue(UnitValue.PERCENT, 50),
-                new UnitValue(UnitValue.PERCENT, 15),
-                new UnitValue(UnitValue.PERCENT, 15),
+                new UnitValue(UnitValue.PERCENT, 85),
                 new UnitValue(UnitValue.PERCENT, 15)})
                 .setWidthPercent(100);
 
-        table.addCell("");
         table.addCell(getTotalDiscountTexts());
-        table.addCell("");
         table.addCell(getAmount(invoice));
-        table.addCell("");
 
         return table;
 
@@ -387,6 +381,8 @@ public class InvoicePdfView extends AbstractView {
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
         table.setMarginBottom(10);
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
@@ -408,8 +404,9 @@ public class InvoicePdfView extends AbstractView {
         table.startNewRow();
         table.addCell(getParticularsDataCell(Constants.INTERNATIONAL_BANK_TXF));
         table.startNewRow();
+        table.setMarginTop(10);
         table.addCell(getParticularsDataCell(Constants.PACKAGE_INCLUSIONS).setBold());
-        table.addCell(getParticularsDataCell(invoice.getPackageInclusions()));
+        table.addCell(getParticularsDataCell(invoice.getPackageInclusions()).setFontSize(9));
 
 
         cell = new Cell()

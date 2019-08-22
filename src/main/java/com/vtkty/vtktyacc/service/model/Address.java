@@ -1,9 +1,13 @@
 package com.vtkty.vtktyacc.service.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Entity
 @Document(collection = "agencyAddress")
 public class Address {
 

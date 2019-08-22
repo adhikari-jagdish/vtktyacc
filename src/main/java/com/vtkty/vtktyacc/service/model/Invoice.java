@@ -1,19 +1,25 @@
 package com.vtkty.vtktyacc.service.model;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+@Entity
 @Document(collection = "invoice")
 public class Invoice {
 
-    private int invoiceNo;
+    private long invoiceNo;
     private String agencyName;
     private String gstNumber;
     private String passengerName;
@@ -57,7 +63,6 @@ public class Invoice {
     @Column(name = "modifiedDate")
     @LastModifiedDate
     private Date modifiedDate;
-
 
     public String getAgencyName() {
         return agencyName;
@@ -227,11 +232,11 @@ public class Invoice {
         this.hotelCategory = hotelCategory;
     }
 
-    public int getInvoiceNo() {
+    public long getInvoiceNo() {
         return invoiceNo;
     }
 
-    public void setInvoiceNo(int invoiceNo) {
+    public void setInvoiceNo(long invoiceNo) {
         this.invoiceNo = invoiceNo;
     }
 

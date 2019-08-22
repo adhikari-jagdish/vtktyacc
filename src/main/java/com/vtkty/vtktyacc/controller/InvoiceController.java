@@ -4,6 +4,7 @@ import com.vtkty.vtktyacc.service.DAL.AddressDalImp;
 import com.vtkty.vtktyacc.service.model.Address;
 import com.vtkty.vtktyacc.service.model.Invoice;
 import com.vtkty.vtktyacc.service.repository.InvoiceRepository;
+import com.vtkty.vtktyacc.service.repository.InvoiceRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class InvoiceController {
 
     private Invoice report;
+    private static final String INVOICE_SEQ_KEY = "invoice";
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private InvoiceRepositoryImpl invoiceRepositoryImpl;
+
 
     @Autowired
     private AddressDalImp addressDalImp;
@@ -84,6 +90,8 @@ public class InvoiceController {
                               @RequestParam int nepalRemitCharges,
                               @RequestParam float grandTotal) {
         report = new Invoice();
+        //report.setInvoiceId(invoiceRepositoryImpl.maxId().getInvoiceId());
+        report.setInvoiceNo(invoiceRepositoryImpl.maxId().getInvoiceNo() + 1);
         report.setAgencyName(agencyName);
         report.setGstNumber(gstNumber);
         report.setPassengerName(passengerName);
@@ -114,7 +122,7 @@ public class InvoiceController {
         report.setNepalRemitCharges(nepalRemitCharges);
         report.setGrandTotal(grandTotal);
         report.setPackageInclusions(inclusions);
-        //invoiceRepository.save(report);
+        invoiceRepository.save(report);
         return "redirect:pdfinvoice";
     }
 
