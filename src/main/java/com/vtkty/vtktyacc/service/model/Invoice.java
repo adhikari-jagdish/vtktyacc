@@ -27,6 +27,7 @@ public class Invoice {
     private String contactNumber;
     private String countryOfPassport;
     private String destination;
+    private String flightDetails;
     private String checkInDate;
     private String checkOutDate;
     private int noOfDays;
@@ -43,6 +44,7 @@ public class Invoice {
     private String billingCurrency;
     private String hotelCategory;
     private String packageInclusions;
+    private String packageTitle;
     private float rateAdult;
     private float rateChild;
     private float amount;
@@ -50,6 +52,9 @@ public class Invoice {
     private int nepalRemitCharges;
     private float subTotal;
     private float grandTotal;
+    private float lessDiscounts;
+    private float initialBookingAmount;
+    private float balancePayment;
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -63,6 +68,15 @@ public class Invoice {
     @Column(name = "modifiedDate")
     @LastModifiedDate
     private Date modifiedDate;
+
+
+    public String getFlightDetails() {
+        return flightDetails;
+    }
+
+    public void setFlightDetails(String flightDetails) {
+        this.flightDetails = flightDetails;
+    }
 
     public String getAgencyName() {
         return agencyName;
@@ -310,5 +324,37 @@ public class Invoice {
 
     public void setContactNumber(String contactNumber) {
         this.contactNumber = contactNumber;
+    }
+
+    public String getPackageTitle() {
+        return packageTitle;
+    }
+
+    public void setPackageTitle(String packageTitle) {
+        this.packageTitle = packageTitle;
+    }
+
+    public float getLessDiscounts() {
+        return lessDiscounts;
+    }
+
+    public void setLessDiscounts(float lessDiscounts) {
+        this.lessDiscounts = lessDiscounts;
+    }
+
+    public float getInitialBookingAmount() {
+        return initialBookingAmount;
+    }
+
+    public void setInitialBookingAmount(float initialBookingAmount) {
+        this.initialBookingAmount = initialBookingAmount;
+    }
+
+    public float getBalancePayment() {
+        return balancePayment;
+    }
+
+    public void setBalancePayment(float balancePayment) {
+        this.balancePayment = balancePayment;
     }
 }

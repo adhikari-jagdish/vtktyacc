@@ -9,6 +9,9 @@ public class Constants {
     public static final String Less_Discounts = "Less Discounts";
     public static final String Initial_Booking_Amount_Received = "Initial Booking Amount Received";
     public static final String Balance_Payment= "Balance Payment";
+    public static final String GST_NUMBER= "09CUZPA0069C1ZK";
+
+    public static final String BLANK= "";
 
 
 

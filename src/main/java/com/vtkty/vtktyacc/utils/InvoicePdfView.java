@@ -5,6 +5,7 @@ import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Document;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.Map;
 
 import static sun.security.pkcs11.wrapper.Constants.NEWLINE;
@@ -32,11 +34,13 @@ public class InvoicePdfView extends AbstractView {
     private Paragraph p;
     private Cell cell;
     String one = "1";
+    private Invoice invoice;
+    private Address address;
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Invoice invoice = (Invoice) model.get("invoice");
-        Address address = (Address) model.get("address");
+        invoice = (Invoice) model.get("invoice");
+        address = (Address) model.get("address");
         final String DEST = "attachment; filename=" + invoice.getAgencyName() + ".pdf";
         response.setHeader("Content-Disposition", DEST);
 
@@ -55,11 +59,6 @@ public class InvoicePdfView extends AbstractView {
         pdfDocument.add(getAgencyDetailsTable(invoice));
 
         pdfDocument.add(getTourDetailsTable(invoice));
-        pdfDocument.add(getTourDetailsSecTable(invoice));
-
-        pdfDocument.add(getNoofPaxTable(invoice));
-
-        pdfDocument.add(getNoofRoomsTable(invoice));
 
         pdfDocument.add(getHeaderTable());
         pdfDocument.add(getBodyTable(invoice));
@@ -69,12 +68,19 @@ public class InvoicePdfView extends AbstractView {
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .setTextAlignment(TextAlignment.LEFT)
-                .add(new Text("Amount in words : ").setBold()).add(new Text("INR. Eighty Three Thousand Four Hundred Eight 72 Paisa Only"));
+                .add(new Text("Amount in words : ").setBold()).add(new Text(Utils.convertToIndianCurrency(String.valueOf(invoice.getGrandTotal()))));
         pdfDocument.add(p);
 
         pdfDocument.add(getBankDetailsTable());
 
-        pdfDocument.add(getEndSignTable());
+        //pdfDocument.add(getEndSignTable());
+
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(NEWLINE).add(NEWLINE)
+                .add(new Text("Note: This is a computer generated invoice and does not require a signature/stamp."));
+        pdfDocument.add(p);
 
         pdfDocument.close(); //close document
     }
@@ -101,8 +107,9 @@ public class InvoicePdfView extends AbstractView {
                 .setMultipliedLeading(1.0f)
                 .setTextAlignment(TextAlignment.RIGHT)
                 .add(new Text("Invoice").setBold().setFontSize(22)).add(NEWLINE)
-                .add(new Text("Invoice Number: " + invoice.getInvoiceNo())).add(NEWLINE)
-                .add(new Text("Invoice Date: " + invoice.getCheckInDate()));
+                .add(new Text("Invoice Number: " + invoice.getInvoiceNo() + "/" + address.getAgencyCode() + "/" + LocalDate.now().getYear())).add(NEWLINE)
+                .add(new Text("Invoice Date: " + LocalDate.now())).add(NEWLINE)
+                .add(new Text("GSTIN No.: " + Constants.GST_NUMBER));
 
         cell = new Cell()
                 .setBorder(Border.NO_BORDER)
@@ -161,95 +168,40 @@ public class InvoicePdfView extends AbstractView {
 
         table.addCell(getPartyDetailsLeft(invoice.getAgencyName(), invoice.getGstNumber(),
                 invoice.getPassengerName(), invoice.getContactPerson(), invoice.getCountryOfPassport(),
-                invoice.getDestination(), "6396667854"));
+                invoice.getDestination(), invoice.getContactNumber()));
 
 
         return table;
     }
 
-    //Destination/Nationality/Flight Table
+    //Destination/Nationality/Flight Table (Upper of SN/Particulars)
     private Table getTourDetailsTable(Invoice invoice) {
         Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 25),
-                new UnitValue(UnitValue.PERCENT, 25),
-                new UnitValue(UnitValue.PERCENT, 50)})
-                .setMarginBottom(5)
+                new UnitValue(UnitValue.PERCENT, 33),
+                new UnitValue(UnitValue.PERCENT, 33),
+                new UnitValue(UnitValue.PERCENT, 33)
+        })
+                .setMarginBottom(15)
                 .setWidthPercent(100);
 
         table.addCell(getParticularsDataCell("Destination : " + invoice.getDestination()));
         table.addCell(getParticularsDataCell("Nationality : " + invoice.getNationality()));
-        table.addCell(getParticularsDataCell("Flight Details : " + "ATR-72  Indigo"));
-
-        return table;
-
-    }
-
-    //TourDetailsSecTable Checkin/Checkout/MealPlan
-    private Table getTourDetailsSecTable(Invoice invoice) {
-        Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 35),
-                new UnitValue(UnitValue.PERCENT, 35),
-                new UnitValue(UnitValue.PERCENT, 30)})
-                .setMarginBottom(5)
-                .setWidthPercent(100);
-
+        table.addCell(getParticularsDataCell("Flight Details : " + invoice.getFlightDetails()));
+        table.startNewRow();
         table.addCell(getParticularsDataCell("Check In Date : " + invoice.getCheckInDate()));
         table.addCell(getParticularsDataCell("Check Out Date : " + invoice.getCheckOutDate()));
         table.addCell(getParticularsDataCell("Meals Plan : " + invoice.getMealPlan()));
-
-        return table;
-
-    }
-
-    //No of Adult/Child/Infant
-    private Table getNoofPaxTable(Invoice invoice) {
-        Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 20)
-        })
-                .setMarginBottom(5)
-                .setWidthPercent(100);
-
+        table.startNewRow();
         table.addCell(getParticularsDataCell("No of Adult : " + invoice.getNoOfAdult()));
-        table.addCell(getParticularsDataCell("Child : " + invoice.getNoOfChild()));
-        table.addCell(getParticularsDataCell("Infant : " + invoice.getNoOfInfant()));
-        table.addCell(getParticularsDataCell("Hotel : " + invoice.getHotelCategory()));
-
-        return table;
-
-    }
-
-    //No of Adult/Child/Infant
-    private Table getNoofRoomsTable(Invoice invoice) {
-        Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 30),
-                new UnitValue(UnitValue.PERCENT, 25),
-                new UnitValue(UnitValue.PERCENT, 20),
-                new UnitValue(UnitValue.PERCENT, 25)})
-                .setMarginBottom(15)
-                .setWidthPercent(100);
-
+        table.addCell(getParticularsDataCell("No of Child : " + invoice.getNoOfChild()));
+        table.addCell(getParticularsDataCell("No of Infant : " + invoice.getNoOfInfant()));
+        table.startNewRow();
         table.addCell(getParticularsDataCell("No of Rooms (SNG) : " + invoice.getNoOfRoomsSng()));
-        table.addCell(getParticularsDataCell("Double (DBL) : " + invoice.getNoOfRoomsDbl()));
-        table.addCell(getParticularsDataCell("Triple (TRP) : " + invoice.getNoOfRoomsTrp()));
-        table.addCell(getParticularsDataCell("Quad (QUAD) : " + invoice.getNoofRoomsQuad()));
-        return table;
-    }
-
-    //TourDetailsSecTable Checkin/Checkout/MealPlan
-    private Table getTourDetailsThirdTable(Invoice invoice) {
-        Table table = new Table(new UnitValue[]{
-                new UnitValue(UnitValue.PERCENT, 40),
-                new UnitValue(UnitValue.PERCENT, 40),
-                new UnitValue(UnitValue.PERCENT, 20)})
-                .setMarginBottom(5)
-                .setWidthPercent(100);
-
-        table.addCell(getParticularsDataCell("No of Nights : " + (invoice.getNoOfDays() - 1)));
-        table.addCell(getParticularsDataCell("Hotel : " + invoice.getHotelCategory()));
-
+        table.addCell(getParticularsDataCell("No of Rooms (DBL) : " + invoice.getNoOfRoomsDbl()));
+        table.addCell(getParticularsDataCell("No of Rooms (TRP) : " + invoice.getNoOfRoomsTrp()));
+        table.startNewRow();
+        table.addCell(getParticularsDataCell("Hotel Category : " + invoice.getHotelCategory()));
+        table.addCell(getParticularsDataCell("No of Rooms (QUAD) : " + invoice.getNoofRoomsQuad()));
         return table;
 
     }
@@ -301,7 +253,7 @@ public class InvoicePdfView extends AbstractView {
                 .setWidthPercent(100);
 
         table.addCell(getTotalDiscountTexts());
-        table.addCell(getAmount(invoice));
+        table.addCell(getGrandTotal(invoice));
 
         return table;
 
@@ -334,10 +286,6 @@ public class InvoicePdfView extends AbstractView {
                 .setWidthPercent(100);
 
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getAmount())));
-        table.startNewRow();
-        table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
-        table.startNewRow();
-        table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
@@ -381,8 +329,28 @@ public class InvoicePdfView extends AbstractView {
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
         table.setMarginBottom(10);
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
+
+        cell = new Cell()
+                .setTextAlignment(TextAlignment.CENTER)
+                .add(table);
+
+        return cell;
+    }
+
+    //Get the grand Total/less discounts/initial amount/balance payment
+    private Cell getGrandTotal(Invoice invoice) {
+
+        Table table = new Table(new UnitValue[]{
+                new UnitValue(UnitValue.PERCENT, 100)})
+                .setWidthPercent(100);
+
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getGrandTotal())));
         table.setMarginBottom(10);
         table.addCell(getParticularsDataCell(String.valueOf(invoice.getGst())));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
+        table.setMarginBottom(10);
+        table.addCell(getParticularsDataCell(String.valueOf(invoice.getNepalRemitCharges())));
 
         cell = new Cell()
                 .setTextAlignment(TextAlignment.CENTER)
@@ -404,7 +372,6 @@ public class InvoicePdfView extends AbstractView {
         table.startNewRow();
         table.addCell(getParticularsDataCell(Constants.INTERNATIONAL_BANK_TXF));
         table.startNewRow();
-        table.setMarginTop(10);
         table.addCell(getParticularsDataCell(Constants.PACKAGE_INCLUSIONS).setBold());
         table.addCell(getParticularsDataCell(invoice.getPackageInclusions()).setFontSize(9));
 

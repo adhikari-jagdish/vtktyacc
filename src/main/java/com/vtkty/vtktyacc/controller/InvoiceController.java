@@ -5,6 +5,7 @@ import com.vtkty.vtktyacc.service.model.Address;
 import com.vtkty.vtktyacc.service.model.Invoice;
 import com.vtkty.vtktyacc.service.repository.InvoiceRepository;
 import com.vtkty.vtktyacc.service.repository.InvoiceRepositoryImpl;
+import com.vtkty.vtktyacc.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +13,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+
+import static org.apache.commons.beanutils.ConvertUtils.convert;
+
 @Controller
 @RequestMapping(value = "/home")
 public class InvoiceController {
 
     private Invoice report;
-    private static final String INVOICE_SEQ_KEY = "invoice";
 
     @Autowired
     private InvoiceRepository invoiceRepository;
@@ -45,7 +52,7 @@ public class InvoiceController {
     }
 
     @GetMapping(value = "/get")
-    public Address getAgencyAddress(@RequestParam  String agencyCode){
+    public Address getAgencyAddress(@RequestParam String agencyCode) {
         return addressDalImp.getByAgencyCode(agencyCode);
     }
 
@@ -66,6 +73,7 @@ public class InvoiceController {
                               @RequestParam String contactNumber,
                               @RequestParam String countryOfPassport,
                               @RequestParam String destination,
+                              @RequestParam String flightDetails,
                               @RequestParam String checkInDate,
                               @RequestParam String checkOutDate,
                               @RequestParam int noOfDays,
@@ -82,13 +90,17 @@ public class InvoiceController {
                               @RequestParam String billingCurrency,
                               @RequestParam String hotelCategory,
                               @RequestParam String inclusions,
+                              @RequestParam String tourTitle,
                               @RequestParam float rateAdult,
                               @RequestParam float rateChild,
                               @RequestParam float amount,
                               @RequestParam float gst,
                               @RequestParam float subTotal,
                               @RequestParam int nepalRemitCharges,
-                              @RequestParam float grandTotal) {
+                              @RequestParam float grandTotal,
+                              @RequestParam float lessDiscounts,
+                              @RequestParam float initialBookingAmount,
+                              @RequestParam float balancePayment) {
         report = new Invoice();
         //report.setInvoiceId(invoiceRepositoryImpl.maxId().getInvoiceId());
         report.setInvoiceNo(invoiceRepositoryImpl.maxId().getInvoiceNo() + 1);
@@ -99,6 +111,7 @@ public class InvoiceController {
         report.setContactNumber(contactNumber);
         report.setCountryOfPassport(countryOfPassport);
         report.setDestination(destination);
+        report.setFlightDetails(flightDetails);
         report.setCheckInDate(checkInDate);
         report.setCheckOutDate(checkOutDate);
         report.setNoOfDays(noOfDays);
@@ -122,8 +135,13 @@ public class InvoiceController {
         report.setNepalRemitCharges(nepalRemitCharges);
         report.setGrandTotal(grandTotal);
         report.setPackageInclusions(inclusions);
+        report.setPackageTitle(tourTitle);
+        report.setInitialBookingAmount(initialBookingAmount);
+        report.setLessDiscounts(lessDiscounts);
+        report.setBalancePayment(balancePayment);
         invoiceRepository.save(report);
         return "redirect:pdfinvoice";
     }
+
 
 }

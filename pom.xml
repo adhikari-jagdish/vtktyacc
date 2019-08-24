@@ -95,6 +95,13 @@
 			<version>5.2.12.Final</version>
 		</dependency>
 
+		<!--Money Conversion-->
+		<dependency>
+			<groupId>pl.allegro.finance</groupId>
+			<artifactId>tradukisto</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
 	<!--	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
