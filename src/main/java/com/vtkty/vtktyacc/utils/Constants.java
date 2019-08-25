@@ -10,6 +10,7 @@ public class Constants {
     public static final String Initial_Booking_Amount_Received = "Initial Booking Amount Received";
     public static final String Balance_Payment= "Balance Payment";
     public static final String GST_NUMBER= "09CUZPA0069C1ZK";
+    public static final String NOTE= "Note: This is a computer generated invoice and does not require a signature/stamp.";
 
     public static final String BLANK= "";
 

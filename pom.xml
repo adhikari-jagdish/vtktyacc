@@ -83,6 +83,7 @@
 			<type>pom</type>
 		</dependency>
 
+
 		<!-- Spring Data MongoDB-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -93,13 +94,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>5.2.12.Final</version>
-		</dependency>
-
-		<!--Money Conversion-->
-		<dependency>
-			<groupId>pl.allegro.finance</groupId>
-			<artifactId>tradukisto</artifactId>
-			<version>1.1.0</version>
 		</dependency>
 
 	<!--	<dependency>

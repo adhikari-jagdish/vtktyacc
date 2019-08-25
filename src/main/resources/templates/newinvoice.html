@@ -251,20 +251,22 @@
                     <div class="col-sm-3">
                         <label for="inputRateAdult">Rate (Per Adult)</label>
                         <input type="number" class="form-control" id="inputRateAdult" name="rateAdult"
-                               placeholder="Rate per Adult" oninput="calculatetotal()">
+                               placeholder="Rate per Adult" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputRateChild">Rate (Per Child)</label>
+                       <!-- <input type="number" class="form-control" id="inputRateChild" name="rateChild"
+                               placeholder="Rate per Child" oninput="calculatetotal()">-->
                         <input type="number" class="form-control" id="inputRateChild" name="rateChild"
-                               placeholder="Rate per Child" oninput="calculatetotal()">
+                               placeholder="Rate per Child" >
                     </div>
                     <div class="col-sm-3">
                         <label for="inputAmount">Amount</label>
-                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount">
+                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputGst">GST (5%)</label>
-                        <input type="number" class="form-control" id="inputGst" placeholder="GST" name="gst">
+                        <input type="number" class="form-control" id="inputGst" placeholder="GST" name="gst" required>
                     </div>
 
                 </div>
@@ -275,18 +277,18 @@
                     <div class="col-sm-4">
                         <label for="inputSubTotal">Sub Total</label>
                         <input type="number" class="form-control" id="inputSubTotal" name="subTotal"
-                               placeholder="Sub Total">
+                               placeholder="Sub Total" required>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="inputNepalRemitCharges">Nepal Remit Charges</label>
                         <input type="number" class="form-control" id="inputNepalRemitCharges" name="nepalRemitCharges"
-                               placeholder="Nepal Remit Charges">
+                               placeholder="Nepal Remit Charges" required>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputGrandTotal">Grand Total</label>
                         <input type="number" class="form-control" id="inputGrandTotal" name="grandTotal"
-                               placeholder="Grand Total">
+                               placeholder="Grand Total" required>
                     </div>
 
                 </div>
@@ -297,19 +299,19 @@
                     <div class="col-sm-4">
                         <label for="inputSubTotal">Less Discounts</label>
                         <input type="number" class="form-control" id="inputLessDiscounts" name="lessDiscounts"
-                               placeholder="Less Discounts">
+                               placeholder="Less Discounts" required>
                     </div>
 
                     <div class="col-sm-4">
                         <label for="inputNepalRemitCharges">Initial Booking Amount Received</label>
                         <input type="number" class="form-control" id="inputInitialBookingAmt"
                                name="initialBookingAmount"
-                               placeholder="Initial Booking Amount Received">
+                               placeholder="Initial Booking Amount Received" required>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputGrandTotal">Balance Payment</label>
                         <input type="number" class="form-control" id="inputBalancePayment" name="balancePayment"
-                               placeholder="Balance Payment">
+                               placeholder="Balance Payment" required>
                     </div>
 
                 </div>

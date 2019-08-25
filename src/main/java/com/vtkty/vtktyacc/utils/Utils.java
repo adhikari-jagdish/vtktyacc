@@ -65,6 +65,6 @@ public class Utils {
         String Rupees = String.join(" ", str).trim();
 
         //String paise = (decimal) > 0 ? " And Paise " + words.get(decimal - decimal % 10) + " " + words.get(decimal % 10) : "";
-        return " INR " + Rupees + " Only";
+        return " INR. " + Rupees + " Only";
     }
 }

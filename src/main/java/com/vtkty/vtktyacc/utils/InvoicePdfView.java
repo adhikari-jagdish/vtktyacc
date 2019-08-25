@@ -8,6 +8,7 @@ import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
+import com.itextpdf.kernel.pdf.canvas.draw.SolidLine;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
 import com.itextpdf.layout.element.*;
@@ -33,7 +34,6 @@ public class InvoicePdfView extends AbstractView {
 
     private Paragraph p;
     private Cell cell;
-    String one = "1";
     private Invoice invoice;
     private Address address;
 
@@ -41,7 +41,7 @@ public class InvoicePdfView extends AbstractView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         invoice = (Invoice) model.get("invoice");
         address = (Address) model.get("address");
-        final String DEST = "attachment; filename=" + invoice.getAgencyName() + ".pdf";
+        final String DEST = "attachment; filename=" + "Invoice " + invoice.getAgencyName()+"/"+invoice.getInvoiceNo() + ".pdf";
         response.setHeader("Content-Disposition", DEST);
 
 
@@ -74,13 +74,17 @@ public class InvoicePdfView extends AbstractView {
         pdfDocument.add(getBankDetailsTable());
 
         //pdfDocument.add(getEndSignTable());
+        final SolidLine lineDrawer = new SolidLine(1f);
+        lineDrawer.setColor(Color.GRAY);
+       pdfDocument.add(new LineSeparator(lineDrawer));
 
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .setTextAlignment(TextAlignment.CENTER)
-                .add(NEWLINE).add(NEWLINE)
-                .add(new Text("Note: This is a computer generated invoice and does not require a signature/stamp."));
+                .add(new Text(Constants.NOTE));
         pdfDocument.add(p);
+
+        pdfDocument.add(new LineSeparator(lineDrawer));
 
         pdfDocument.close(); //close document
     }
@@ -405,6 +409,7 @@ public class InvoicePdfView extends AbstractView {
                 new UnitValue(UnitValue.PERCENT, 20),
                 new UnitValue(UnitValue.PERCENT, 20)})
                 .setMarginTop(30)
+                .setMarginBottom(30)
                 .setWidthPercent(100);
 
         table.addCell(getBankBodyCell());
