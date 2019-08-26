@@ -41,7 +41,7 @@ public class InvoicePdfView extends AbstractView {
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         invoice = (Invoice) model.get("invoice");
         address = (Address) model.get("address");
-        final String DEST = "attachment; filename=" + "Invoice " + invoice.getAgencyName()+"/"+invoice.getInvoiceNo() + ".pdf";
+        final String DEST = "attachment; filename=" + "Invoice " + invoice.getAgencyName() + "/" + invoice.getInvoiceNo() + ".pdf";
         response.setHeader("Content-Disposition", DEST);
 
 
@@ -76,7 +76,7 @@ public class InvoicePdfView extends AbstractView {
         //pdfDocument.add(getEndSignTable());
         final SolidLine lineDrawer = new SolidLine(1f);
         lineDrawer.setColor(Color.GRAY);
-       pdfDocument.add(new LineSeparator(lineDrawer));
+        pdfDocument.add(new LineSeparator(lineDrawer));
 
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
@@ -138,10 +138,9 @@ public class InvoicePdfView extends AbstractView {
     }
 
 
-    //Get Party Details
-    private Cell getPartyDetailsLeft(String agencyName, String gstNo, String passengerName,
-                                     String contactPerson, String countryOfPassport, String destination,
-                                     String contactNumber) {
+    //Get Party Details //
+    private Cell getPartyDetailsLeftWithAgency(String agencyName, String gstNo, String passengerName,
+                                               String contactPerson, String contactNumber) {
         p = new Paragraph()
                 .setMultipliedLeading(1.0f)
                 .add(new Text("To:")).add(NEWLINE)
@@ -163,6 +162,23 @@ public class InvoicePdfView extends AbstractView {
     }
 
 
+    private Cell getPartyDetailsLeftWithoutAgency(String passengerName, String contactNumber) {
+        p = new Paragraph()
+                .setMultipliedLeading(1.0f)
+                .add(new Text("To:")).add(NEWLINE)
+                .add(new Text("Passenger Name: ")).add(new Text(passengerName))
+                .add(NEWLINE)
+                .add(new Text("Contact No: ")).add(new Text(contactNumber))
+                .setMarginBottom(20);
+
+        cell = new Cell()
+                .setBorder(Border.NO_BORDER)
+                .setTextAlignment(TextAlignment.LEFT)
+                .add(p);
+
+        return cell;
+    }
+
     //Agency Details Table
     private Table getAgencyDetailsTable(Invoice invoice) {
         //From Text
@@ -170,9 +186,11 @@ public class InvoicePdfView extends AbstractView {
                 new UnitValue(UnitValue.PERCENT, 100)})
                 .setWidthPercent(100);
 
-        table.addCell(getPartyDetailsLeft(invoice.getAgencyName(), invoice.getGstNumber(),
-                invoice.getPassengerName(), invoice.getContactPerson(), invoice.getCountryOfPassport(),
-                invoice.getDestination(), invoice.getContactNumber()));
+        if (!invoice.getAgencyName().equalsIgnoreCase(""))
+            table.addCell(getPartyDetailsLeftWithAgency(invoice.getAgencyName(), invoice.getGstNumber(),
+                    invoice.getPassengerName(), invoice.getContactPerson(), invoice.getContactNumber()));
+        else
+            table.addCell(getPartyDetailsLeftWithoutAgency(invoice.getPassengerName(), invoice.getContactNumber()));
 
 
         return table;
@@ -197,7 +215,6 @@ public class InvoicePdfView extends AbstractView {
         table.addCell(getParticularsDataCell("Meals Plan : " + invoice.getMealPlan()));
         table.startNewRow();
         table.addCell(getParticularsDataCell("No of Adult : " + invoice.getNoOfAdult()));
-        table.addCell(getParticularsDataCell("No of Child : " + invoice.getNoOfChild()));
         table.addCell(getParticularsDataCell("No of Infant : " + invoice.getNoOfInfant()));
         table.startNewRow();
         table.addCell(getParticularsDataCell("No of Rooms (SNG) : " + invoice.getNoOfRoomsSng()));
