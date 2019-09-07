@@ -98,12 +98,12 @@
                     <div class="col-sm-3">
                         <label for="inputCheckIn">Check In</label>
                         <input class="form-control" id="inputCheckIn" name="checkInDate"
-                               placeholder="Check In" type="date" required>
+                               placeholder="Check In" type="date" oninput="calculatedays()" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
                         <input class="form-control" id="inputCheckOut" , name="checkOutDate" placeholder="Check Out" type="date"
-                               required>
+                               oninput="calculatedays()" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputNoofDays">No of Days</label>
