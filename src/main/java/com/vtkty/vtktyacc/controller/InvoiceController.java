@@ -46,9 +46,21 @@ public class InvoiceController {
         return "options";
     }
 
+    //Invoice Redirect
     @RequestMapping(value = "/predirect")
     public String redirect() {
         return "redirect:newinvoice";
+    }
+
+    //Booking Voucher Redirect
+    @RequestMapping(value = "/bvredirect")
+    public String bvRedirect() {
+        return "redirect:newbookingvoucher";
+    }
+
+    @GetMapping(value = "/newbookingvoucher")
+    public String newBookingvoucher() {
+        return "newbookingvoucher";
     }
 
     @GetMapping(value = "/get")
