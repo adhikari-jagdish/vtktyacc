@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>New Invoice</title>
+    <title>New Booking Voucher</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"/>
 
 
 </head>
-<body style="background-color:#10B2B5">
+<body style="background-color:#055626">
 <div class="container" style="background-color:#FFFFFF; padding-top:10px">
 
     <h3 style="margin-bottom:20px;text-align: center">New Booking Voucher</h3>
@@ -22,37 +22,16 @@
                 <hr width="100%">
 
                 <div class="form-group row">
-                    <div class="col-sm-6">
-                        <label for="inputagencyname">Agency Name</label>
-                        <input type="text" class="form-control" id="inputagencyname" name="agencyName"
-                               placeholder="Agency Name">
-                    </div>
-                    <div class="col-sm-6">
-                        <label for="inputGSTNumber">GST Number</label>
-                        <input type="text" class="form-control" id="inputGSTNumber" placeholder="GST Number" ,
-                               name="gstNumber">
-                    </div>
-                </div>
-
-                <div class="form-group row">
                     <div class="col-sm-4">
-                        <label for="inputPassengerName">Passenger Name</label>
+                        <label for="inputPassengerName">Client Name</label>
                         <input type="text" class="form-control" id="inputPassengerName" placeholder="Passenger Name"
                                name="passengerName" required>
-                    </div>
-                    <div class="col-sm-4">
-                        <label for="inputContactPerson">Contact Person</label>
-                        <input type="text" class="form-control" id="inputContactPerson" name="contactPerson"
-                               placeholder="Contact Person">
                     </div>
                     <div class="col-sm-4">
                         <label for="inputContactNumber">Contact Number</label>
                         <input type="number" class="form-control" id="inputContactNumber" name="contactNumber"
                                placeholder="Contact Number">
                     </div>
-                </div>
-
-                <div class="form-group row">
                     <div class="col-sm-4">
                         <label for="inputCountryofPassport">Country of Passport</label>
 
@@ -72,24 +51,30 @@
                         </div>
 
                     </div>
+                </div>
+
+
+                <h5 style="margin-top:20px;text-align: left">Property Details:</h5>
+                <hr width="100%">
+
+                <div class="form-group row">
                     <div class="col-sm-4">
-                        <label for="selectDestination">Destination</label>
-                        <div>
-                            <select class="form-control" name="destination" id="selectDestination">
-                                <option>Nepal</option>
-                                <option>India</option>
-                                <option>Bhutan</option>
-                                <option>Tibet</option>
-                                <option>Mount Kailash</option>
-                            </select>
-                        </div>
+                        <label for="inputPropertyName">Property Name</label>
+                        <input type="text" class="form-control" id="inputPropertyName" placeholder="Property Name"
+                               name="propertyName" required>
                     </div>
                     <div class="col-sm-4">
-                        <label for="inputFlightDetails">Flight Details</label>
-                        <input type="text" class="form-control" id="inputFlightDetails" name="flightDetails"
-                               placeholder="Flight Details">
+                        <label for="inputPropertyAddress">Property Address</label>
+                        <input type="text" class="form-control" id="inputPropertyAddress" name="propertyAddress"
+                               placeholder="Property Address">
+                    </div>
+                    <div class="col-sm-4">
+                        <label for="inputPropertyContactNo">Property Contact Number</label>
+                        <input type="text" class="form-control" id="inputPropertyContactNo" name="propertyContactNo"
+                               placeholder="Property Contact No">
                     </div>
                 </div>
+
 
                 <h5 style="margin-top:40px;text-align: left">Booking Details:</h5>
                 <hr width="100%">
@@ -106,9 +91,9 @@
                                required>
                     </div>
                     <div class="col-sm-3">
-                        <label for="inputNoofDays">No of Days</label>
-                        <input type="number" class="form-control" id="inputNoofDays" placeholder="No of Days"
-                               name="noOfDays">
+                        <label for="inputNoofNights">No of Nights</label>
+                        <input type="number" class="form-control" id="inputNoofNights" placeholder="No of Nights"
+                               name="noOfNights">
                     </div>
                     <div class="col-sm-3">
                         <label for="selectmealplan">Meal Plan</label>
@@ -125,40 +110,33 @@
                 </div>
 
                 <div class="form-group row">
-                    <div class="col-sm-3">
-                        <label for="inputNationality">Nationality</label>
-                        <div>
-                            <select class="form-control" name="nationality" id="inputNationality">
-                                <option value="Indian">Indian</option>
-                                <option value="Bangladeshi">Bangladeshi</option>
-                                <option value="Bhutanese">Bhutanese</option>
-                                <option value="Malaysian">Malaysian</option>
-                                <option value="Sri Lankan">Sri Lankan</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="inputNoofAdult">No of Adult</label>
                         <input type="number" class="form-control" id="inputNoofAdult" name="noOfAdult"
                                placeholder="No of Adult" oninput="calculatetotal()" required>
                     </div>
 
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="inputNoofChild">No of Child</label>
                         <input type="number" class="form-control" id="inputNoofChild" name="noOfChild"
                                placeholder="No of Child" oninput="calculatetotal()" value=0>
                     </div>
 
-                    <div class="col-sm-3">
-                        <label for="inputNoofInfant">No of Infant</label>
-                        <input type="number" class="form-control" id="inputNoofInfant" name="noOfInfant"
-                               placeholder="No of Infant" oninput="calculatetotal()" value=0>
+                    <div class="col-sm-4">
+                        <label for="selectHotelCategory">Hotel Category</label>
+                        <div>
+                            <select class="form-control" name="hotelCategory" id="selectHotelCategory">
+                                <option>5* DLX</option>
+                                <option>4* DLX</option>
+                                <option>3* DLX</option>
+                                <option>3* STD</option>
+                                <option>2* STD</option>
+                                <option>Budget</option>
+                            </select>
+                        </div>
                     </div>
-
-
                 </div>
-
 
                 <div class="form-group row">
                     <div class="col-sm-3">
@@ -186,59 +164,13 @@
 
                 </div>
 
-                <h5 style="margin-top:40px;text-align: left">Billing Details:</h5>
-                <hr width="100%">
 
-                <div class="form-group row">
-                    <div class="col-sm-4">
-                        <label for="selectBillingCountry">Billing Country</label>
-                        <div>
-                            <select class="form-control" name="billingCountry" id="selectBillingCountry">
-                                <option>India</option>
-                                <option>Nepal</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <label for="selectBillingCurrency">Billing Currency</label>
-                        <div>
-                            <select class="form-control" name="billingCurrency" id="selectBillingCurrency">
-                                <option>INR</option>
-                                <option>US$</option>
-                            </select>
-                        </div>
-                    </div>
-
-
-                    <div class="col-sm-4">
-                        <label for="selectHotelCategory">Hotel Category</label>
-                        <div>
-                            <select class="form-control" name="hotelCategory" id="selectHotelCategory">
-                                <option>5* DLX</option>
-                                <option>4* DLX</option>
-                                <option>3* DLX</option>
-                                <option>3* STD</option>
-                                <option>2* STD</option>
-                                <option>Budget</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <h5 style="margin-top:40px;text-align: left">Package Details:</h5>
+                <h5 style="margin-top:40px;text-align: left">Inclusions:</h5>
                 <hr width="100%">
 
                 <div class="form-group row">
 
                     <div class="col-sm-6">
-                        <label for="inputTourTitle">Tour Title</label>
-                        <input type="text" class="form-control" id="inputTourTitle" name="tourTitle"
-                               placeholder="Tour Title">
-                    </div>
-
-                    <div class="col-sm-6">
-                        <label for="inclusions">Tour Inclusions</label>
                         <textarea rows="4" cols="50" id="inclusions" name="inclusions"></textarea>
                     </div>
                 </div>
@@ -248,42 +180,17 @@
                 <hr width="100%">
 
                 <div class="form-group row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="inputRateAdult">Rate (Per Adult)</label>
                         <input type="number" class="form-control" id="inputRateAdult" name="rateAdult"
                                placeholder="Rate per Adult" required>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <label for="inputRateChild">Rate (Per Child)</label>
                         <!-- <input type="number" class="form-control" id="inputRateChild" name="rateChild"
                                 placeholder="Rate per Child" oninput="calculatetotal()">-->
                         <input type="number" class="form-control" id="inputRateChild" name="rateChild"
                                placeholder="Rate per Child" value=0 >
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="inputAmount">Amount</label>
-                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount" required>
-                    </div>
-                    <div class="col-sm-3">
-                        <label for="inputGst">GST (5%)</label>
-                        <input type="number" class="form-control" id="inputGst" placeholder="GST" name="gst" required>
-                    </div>
-
-                </div>
-
-
-                <div class="form-group row">
-
-                    <div class="col-sm-4">
-                        <label for="inputSubTotal">Sub Total</label>
-                        <input type="number" class="form-control" id="inputSubTotal" name="subTotal"
-                               placeholder="Sub Total" required>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <label for="inputNepalRemitCharges">Intl Remit Charge</label>
-                        <input type="number" class="form-control" id="inputNepalRemitCharges" name="nepalRemitCharges"
-                               placeholder="Nepal Remit Charges" required>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputGrandTotal">Grand Total</label>
@@ -297,13 +204,13 @@
                 <div class="form-group row">
 
                     <div class="col-sm-4">
-                        <label for="inputSubTotal">Less Discounts</label>
+                        <label for="inputLessDiscounts">Less Discounts</label>
                         <input type="number" class="form-control" id="inputLessDiscounts" name="lessDiscounts"
                                placeholder="Less Discounts" required>
                     </div>
 
                     <div class="col-sm-4">
-                        <label for="inputNepalRemitCharges">Initial Booking Amount Received</label>
+                        <label for="inputInitialBookingAmt">Initial Booking Amount Received</label>
                         <input type="number" class="form-control" id="inputInitialBookingAmt"
                                name="initialBookingAmount"
                                placeholder="Initial Booking Amount Received" required>
@@ -317,7 +224,7 @@
                 </div>
 
 
-                <button type="submit" class="btn btn-primary px-4 float-center"
+                <button type="submit" class="btn btn-info px-4 float-center"
                         style="margin-bottom:40px;text-align: center">Save
                 </button>
             </form>

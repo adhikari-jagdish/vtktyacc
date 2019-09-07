@@ -98,12 +98,14 @@
                     <div class="col-sm-3">
                         <label for="inputCheckIn">Check In</label>
                         <input class="form-control" id="inputCheckIn" name="checkInDate"
-                               placeholder="Check In" type="date" required>
+                               placeholder="Check In"
+                               oninput="calculatedays()"
+                               required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
-                        <input class="form-control" id="inputCheckOut" , name="checkOutDate" placeholder="Check Out" type="date"
-                               required>
+                        <input class="form-control" id="inputCheckOut" name="checkOutDate" placeholder="Check Out"
+                               oninput="calculatedays()" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputNoofDays">No of Days</label>
@@ -169,7 +171,7 @@
                     <div class="col-sm-3">
                         <label for="inputNoofRoomsDBL">No of Rooms (DBL)</label>
                         <input type="number" class="form-control" id="inputNoofRoomsDBL" name="noOfRoomsDbl"
-                               placeholder="No of Rooms (DBL)" required >
+                               placeholder="No of Rooms (DBL)" required>
                     </div>
 
                     <div class="col-sm-3">
@@ -251,18 +253,17 @@
                     <div class="col-sm-3">
                         <label for="inputRateAdult">Rate (Per Adult)</label>
                         <input type="number" class="form-control" id="inputRateAdult" name="rateAdult"
-                               placeholder="Rate per Adult" required>
+                               placeholder="Rate per Adult" oninput="calculatetotal()" required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputRateChild">Rate (Per Child)</label>
-                       <!-- <input type="number" class="form-control" id="inputRateChild" name="rateChild"
-                               placeholder="Rate per Child" oninput="calculatetotal()">-->
-                        <input type="number" class="form-control" id="inputRateChild" name="rateChild"
-                               placeholder="Rate per Child" value=0 >
+                         <input type="number" class="form-control" id="inputRateChild" name="rateChild"
+                                placeholder="Rate per Child" oninput="calculatetotal()">
                     </div>
                     <div class="col-sm-3">
                         <label for="inputAmount">Amount</label>
-                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount" required>
+                        <input type="number" class="form-control" id="inputAmount" name="amount" placeholder="Amount"
+                               required>
                     </div>
                     <div class="col-sm-3">
                         <label for="inputGst">GST (5%)</label>
