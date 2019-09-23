@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:form="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>New Booking Voucher</title>
@@ -16,16 +16,16 @@
     <hr width="100%">
     <div class="row">
         <div class="col-md-12 mx-auto">
-            <form role="form" th:action="@{/home/pdfredirect}" method="post">
+            <form role="form" th:action="@{/home/pdfbookingvoucherredirect" method="post">
 
                 <h5 style="margin-top:20px;text-align: left">Client Details:</h5>
                 <hr width="100%">
 
                 <div class="form-group row">
                     <div class="col-sm-4">
-                        <label for="inputPassengerName">Client Name</label>
-                        <input type="text" class="form-control" id="inputPassengerName" placeholder="Passenger Name"
-                               name="passengerName" required>
+                        <label for="inputClientName">Client Name</label>
+                        <input type="text" class="form-control" id="inputClientName" placeholder="Client Name"
+                               name="clientName" required>
                     </div>
                     <div class="col-sm-4">
                         <label for="inputContactNumber">Contact Number</label>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-sm-3">
                         <label for="inputCheckOut">Check Out</label>
-                        <input class="form-control" id="inputCheckOut" , name="checkOutDate" placeholder="Check Out"
+                        <input class="form-control" id="inputCheckOut" name="checkOutDate" placeholder="Check Out"
                                required>
                     </div>
                     <div class="col-sm-3">

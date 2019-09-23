@@ -2,7 +2,9 @@ package com.vtkty.vtktyacc.controller;
 
 import com.vtkty.vtktyacc.service.DAL.AddressDalImp;
 import com.vtkty.vtktyacc.service.model.Address;
+import com.vtkty.vtktyacc.service.model.BookingVoucher;
 import com.vtkty.vtktyacc.service.model.Invoice;
+import com.vtkty.vtktyacc.service.repository.BookingVoucherRepository;
 import com.vtkty.vtktyacc.service.repository.InvoiceRepository;
 import com.vtkty.vtktyacc.service.repository.InvoiceRepositoryImpl;
 import com.vtkty.vtktyacc.utils.Utils;
@@ -25,9 +27,13 @@ import static org.apache.commons.beanutils.ConvertUtils.convert;
 public class InvoiceController {
 
     private Invoice report;
+    private BookingVoucher bookingVoucher;
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private BookingVoucherRepository bookingVoucherRepository;
 
     @Autowired
     private InvoiceRepositoryImpl invoiceRepositoryImpl;
@@ -60,14 +66,13 @@ public class InvoiceController {
 
     @GetMapping(value = "/newbookingvoucher")
     public String newBookingvoucher() {
-        return "newbookingvoucher";
+        return "pdfbookingvoucherredirect";
     }
 
     @GetMapping(value = "/get")
     public Address getAgencyAddress(@RequestParam String agencyCode) {
         return addressDalImp.getByAgencyCode(agencyCode);
     }
-
 
     //PDF
     @GetMapping("/pdfinvoice")
@@ -153,6 +158,39 @@ public class InvoiceController {
         report.setBalancePayment(balancePayment);
         invoiceRepository.save(report);
         return "redirect:pdfinvoice";
+    }
+
+    @RequestMapping(value = "/pdfbookingvoucherredirect")
+    public String pdfbookingvoucherredirect(@RequestParam String clientName,
+                                    @RequestParam String contactNumber,
+                                    @RequestParam String countryOfPassport,
+                                    @RequestParam String propertyName,
+                                    @RequestParam String propertyAddress,
+                                    @RequestParam String propertyContactNo,
+                                    @RequestParam String checkInDate,
+                                    @RequestParam String checkOutDate,
+                                    @RequestParam int noOfNights,
+                                    @RequestParam String mealPlan,
+                                    @RequestParam int noOfAdult,
+                                    @RequestParam int noOfChild,
+                                    @RequestParam String hotelCategory,
+                                    @RequestParam int noOfRoomsSng,
+                                    @RequestParam int noOfRoomsDbl,
+                                    @RequestParam int noOfRoomsTrp,
+                                    @RequestParam int noofRoomsQuad,
+                                    @RequestParam String inclusions,
+                                    @RequestParam float rateAdult,
+                                    @RequestParam float rateChild,
+                                    @RequestParam float grandTotal,
+                                    @RequestParam float lessDiscounts,
+                                    @RequestParam float initialBookingAmount,
+                                    @RequestParam float balancePayment){
+        bookingVoucher = new BookingVoucher(clientName, contactNumber, countryOfPassport, propertyName, propertyAddress, propertyContactNo,
+                checkInDate, checkOutDate, noOfNights, mealPlan, noOfAdult, noOfChild, hotelCategory, noOfRoomsSng,
+                noOfRoomsDbl, noOfRoomsTrp, noofRoomsQuad, inclusions, rateAdult, rateChild, grandTotal, lessDiscounts,
+                initialBookingAmount, balancePayment);
+        bookingVoucherRepository.save(bookingVoucher);
+        return "redirect:pdfBookingVoucher";
     }
 
 
